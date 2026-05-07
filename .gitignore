@@ -1,0 +1,17 @@
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies (if any)
+node_modules/
+
+# Build files
+dist/
+build/
