@@ -8,1220 +8,604 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --primary: #fff8fb;
             --accent-gold: #ffb703;
             --accent-rose: #ff7aa2;
             --accent-violet: #a78bfa;
             --accent-teal: #67e8f9;
             --accent-lime: #86efac;
-            --accent-orange: #fb923c;
-            --text-light: #2b2d42;
-            --glass: rgba(255, 255, 255, 0.55);
-            --glass-border: rgba(255, 255, 255, 0.75);
+            --text-dark: #2b2d42;
+            --glass: rgba(255,255,255,0.55);
+            --glass-border: rgba(255,255,255,0.75);
         }
 
         body {
-            font-family: 'Comic Sans MS', 'DM Sans', sans-serif;
+            font-family: 'DM Sans', sans-serif;
             background:
-                radial-gradient(circle at top left, rgba(255, 182, 193, 0.7), transparent 30%),
-                radial-gradient(circle at top right, rgba(167, 139, 250, 0.45), transparent 25%),
-                radial-gradient(circle at bottom left, rgba(103, 232, 249, 0.35), transparent 25%),
+                radial-gradient(circle at top left, rgba(255,182,193,0.7), transparent 30%),
+                radial-gradient(circle at top right, rgba(167,139,250,0.45), transparent 25%),
+                radial-gradient(circle at bottom left, rgba(103,232,249,0.35), transparent 25%),
                 linear-gradient(135deg, #fff5fb 0%, #fef3c7 35%, #dbeafe 70%, #fce7f3 100%);
             background-size: 100% 100%, 100% 100%, 100% 100%, 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            color: var(--text-light);
+            animation: bgShift 15s ease infinite;
+            color: var(--text-dark);
             overflow-x: hidden;
             min-height: 100vh;
-            position: relative;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes bgShift {
+            0%,100% { background-position: 0% 50%; }
+            50%      { background-position: 100% 50%; }
         }
 
-        /* Animated Background Particles */
-        .particle-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-
+        /* Particles */
+        .particle-container { position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden; }
         .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #ffffff;
-            border-radius: 50%;
-            opacity: 0;
-            animation: particleFloat var(--duration) linear infinite;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+            position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:0;
+            animation:particleFloat var(--dur) linear infinite;
+            box-shadow:0 0 10px rgba(255,255,255,0.6);
         }
-
         @keyframes particleFloat {
-            0% {
-                transform: translateY(100vh) translateX(0) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(var(--drift)) scale(1);
-                opacity: 0;
-            }
+            0%   { transform:translateY(100vh) translateX(0) scale(0);opacity:0; }
+            10%  { opacity:1; }
+            90%  { opacity:1; }
+            100% { transform:translateY(-100vh) translateX(var(--drift)) scale(1);opacity:0; }
         }
 
-        /* 3D Scene Container */
-        .scene-3d {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            perspective: 1000px;
-            perspective-origin: 50% 50%;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            animation: orbFloat 15s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(167, 139, 250, 0.9) 0%, transparent 70%);
-            top: 10%;
-            left: -10%;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(255, 122, 162, 0.9) 0%, transparent 70%);
-            top: 60%;
-            right: -5%;
-            animation-delay: 5s;
-        }
-
-        .orb-3 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(103, 232, 249, 0.9) 0%, transparent 70%);
-            bottom: 10%;
-            left: 40%;
-            animation-delay: 10s;
-        }
-
+        /* Orbs */
+        .scene-3d { position:fixed;inset:0;pointer-events:none;z-index:2; }
+        .orb { position:absolute;border-radius:50%;filter:blur(60px);animation:orbFloat 15s ease-in-out infinite; }
+        .orb-1 { width:400px;height:400px;background:radial-gradient(circle,rgba(167,139,250,0.9),transparent 70%);top:10%;left:-10%; }
+        .orb-2 { width:350px;height:350px;background:radial-gradient(circle,rgba(255,122,162,0.9),transparent 70%);top:60%;right:-5%;animation-delay:5s; }
+        .orb-3 { width:300px;height:300px;background:radial-gradient(circle,rgba(103,232,249,0.9),transparent 70%);bottom:10%;left:40%;animation-delay:10s; }
         @keyframes orbFloat {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-            }
-            33% {
-                transform: translate(100px, -50px) scale(1.1);
-            }
-            66% {
-                transform: translate(-50px, 100px) scale(0.9);
-            }
+            0%,100% { transform:translate(0,0) scale(1); }
+            33%     { transform:translate(100px,-50px) scale(1.1); }
+            66%     { transform:translate(-50px,100px) scale(0.9); }
         }
 
-        /* Main Content */
-        .content {
-            position: relative;
-            z-index: 10;
-            padding: 60px 20px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
+        /* Layout */
+        .content { position:relative;z-index:10;padding:60px 20px;max-width:900px;margin:0 auto; }
 
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 80px 0 60px;
-            position: relative;
-            transform-style: preserve-3d;
-        }
-
+        /* Hero */
+        .hero { text-align:center;padding:80px 0 60px; }
         .floating-icon {
-            font-size: 120px;
-            display: inline-block;
-            animation: float3d 6s ease-in-out infinite;
-            filter: drop-shadow(0 20px 40px rgba(255, 122, 162, 0.35));
-            transform-style: preserve-3d;
+            font-size:120px;display:inline-block;
+            animation:float3d 6s ease-in-out infinite;
+            filter:drop-shadow(0 20px 40px rgba(255,122,162,0.35));
         }
-
         @keyframes float3d {
-            0%, 100% {
-                transform: translateY(0) rotateY(0deg) rotateX(0deg);
-            }
-            25% {
-                transform: translateY(-30px) rotateY(10deg) rotateX(5deg);
-            }
-            50% {
-                transform: translateY(0) rotateY(0deg) rotateX(-5deg);
-            }
-            75% {
-                transform: translateY(-30px) rotateY(-10deg) rotateX(5deg);
-            }
+            0%,100% { transform:translateY(0) rotateY(0deg) rotateX(0deg); }
+            25%     { transform:translateY(-30px) rotateY(10deg) rotateX(5deg); }
+            50%     { transform:translateY(0) rotateY(0deg) rotateX(-5deg); }
+            75%     { transform:translateY(-30px) rotateY(-10deg) rotateX(5deg); }
         }
-
         h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 900;
-            background: linear-gradient(135deg,
-                #ff7aa2 0%,
-                #ffd166 25%,
-                #a78bfa 50%,
-                #67e8f9 75%,
-                #86efac 100%);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 8s ease infinite;
-            margin: 30px 0;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-            text-shadow: 0 0 80px rgba(255, 122, 162, 0.25);
+            font-family:'Playfair Display',serif;
+            font-size:clamp(3rem,8vw,6rem);font-weight:900;
+            background:linear-gradient(135deg,#ff7aa2 0%,#ffd166 25%,#a78bfa 50%,#67e8f9 75%,#86efac 100%);
+            background-size:300% 300%;
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+            animation:gradientShift 8s ease infinite;
+            margin:30px 0;line-height:1.1;letter-spacing:-0.02em;
         }
-
         @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            0%,100% { background-position:0% 50%; }
+            50%     { background-position:100% 50%; }
         }
-
-        .tagline {
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            font-weight: 300;
-            color: #4b5563;
-            opacity: 0.9;
-            margin: 20px 0 40px;
-            letter-spacing: 0.05em;
-        }
+        .tagline { font-size:clamp(1.2rem,3vw,1.8rem);font-weight:300;color:#4b5563;margin:20px 0 40px;letter-spacing:0.05em; }
 
         /* Glass Cards */
         .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
-            margin: 30px 0;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
+            background:var(--glass);
+            backdrop-filter:blur(20px) saturate(180%);
+            -webkit-backdrop-filter:blur(20px) saturate(180%);
+            border:1px solid var(--glass-border);
+            border-radius:24px;padding:40px;margin:30px 0;
+            position:relative;overflow:hidden;
+            transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
         }
-
         .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                var(--accent-gold), 
-                transparent);
-            opacity: 0.5;
+            content:'';position:absolute;top:0;left:0;right:0;height:1px;
+            background:linear-gradient(90deg,transparent,var(--accent-gold),transparent);opacity:0.5;
         }
-
         .glass-card:hover {
-            transform: translateY(-8px) rotateX(2deg);
-            box-shadow: 0 30px 60px rgba(255, 122, 162, 0.18),
-                        0 0 80px rgba(167, 139, 250, 0.15);
-            border-color: rgba(255, 122, 162, 0.25);
+            transform:translateY(-8px) rotateX(2deg);
+            box-shadow:0 30px 60px rgba(255,122,162,0.18),0 0 80px rgba(167,139,250,0.15);
+            border-color:rgba(255,122,162,0.25);
         }
-
-        .message-section {
-            font-size: 1.1rem;
-            line-height: 1.9;
-            color: #475569;
-            margin: 25px 0;
-        }
-
-        .highlight {
-            color: #ff7aa2;
-            font-weight: 600;
-            position: relative;
-            display: inline-block;
-        }
-
+        .message-section { font-size:1.1rem;line-height:1.9;color:#475569;margin:25px 0; }
+        .highlight { color:#ff7aa2;font-weight:600;position:relative;display:inline-block; }
         .highlight::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-gold), var(--accent-rose));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;
+            background:linear-gradient(90deg,var(--accent-gold),var(--accent-rose));
+            transform:scaleX(0);transform-origin:left;
+            transition:transform 0.6s cubic-bezier(0.4,0,0.2,1);
         }
+        .glass-card:hover .highlight::after { transform:scaleX(1); }
 
-        .glass-card:hover .highlight::after {
-            transform: scaleX(1);
-        }
-
-        /* Event Details Grid */
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .detail-item {
-            background: linear-gradient(135deg,
-                rgba(255, 255, 255, 0.8) 0%,
-                rgba(255, 226, 238, 0.9) 100%);
-            border: 1px solid rgba(255, 122, 162, 0.18);
-            border-radius: 16px;
-            padding: 30px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .detail-item::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-                background: radial-gradient(circle, rgba(255, 122, 162, 0.12) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .detail-item:hover::before {
-            opacity: 1;
-            animation: shimmer 1.5s ease infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        .detail-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 20px 40px rgba(255, 122, 162, 0.18);
-        }
-
-        .detail-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            display: inline-block;
-            filter: drop-shadow(0 4px 12px rgba(255, 122, 162, 0.25));
-        }
-
-        .detail-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #ff7aa2;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .detail-value {
-            font-size: 1.1rem;
-            font-weight: 500;
-            line-height: 1.6;
-        }
-
-        /* Venue Card */
-        .venue-card {
-            background: linear-gradient(135deg,
-                rgba(255, 248, 251, 0.95) 0%,
-                rgba(219, 234, 254, 0.9) 100%);
-            border: 1px solid rgba(167, 139, 250, 0.2);
-            border-radius: 20px;
-            padding: 35px;
-            margin: 30px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .venue-card::before {
-            content: '📍';
-            position: absolute;
-            font-size: 200px;
-            right: -40px;
-            bottom: -60px;
-            opacity: 0.05;
-        }
-
-        .venue-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #a78bfa;
-            margin-bottom: 15px;
-        }
-
-        .venue-address {
-            font-size: 1rem;
-            line-height: 1.8;
-            opacity: 0.9;
-        }
-
-        /* Button Section */
+        /* Buttons */
         .button-section {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 50px 0;
-            perspective: 1000px;
+            display:flex;gap:20px;justify-content:center;flex-wrap:wrap;
+            margin:50px 0;overflow:visible;position:relative;
         }
-
         .btn {
-            position: relative;
-            padding: 18px 45px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-            overflow: hidden;
+            position:relative;padding:18px 45px;
+            font-size:1.1rem;font-weight:600;font-family:'DM Sans',sans-serif;
+            letter-spacing:0.05em;text-transform:uppercase;
+            border:none;border-radius:50px;cursor:pointer;
+            transition:transform 0.3s ease,box-shadow 0.3s ease,background 0.3s ease;
+            overflow:hidden;
         }
-
         .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
+            content:'';position:absolute;top:50%;left:50%;
+            width:0;height:0;border-radius:50%;
+            background:rgba(255,255,255,0.3);
+            transform:translate(-50%,-50%);
+            transition:width 0.6s ease,height 0.6s ease;
         }
-
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
+        .btn:hover::before { width:300px;height:300px; }
 
         .btn-yes {
-            background: linear-gradient(135deg, #ff7aa2 0%, #ffd166 100%);
-            color: #1f2937;
-            box-shadow: 0 10px 30px rgba(255, 122, 162, 0.25);
+            background:linear-gradient(135deg,#ff7aa2 0%,#ffd166 100%);
+            color:#1f2937;box-shadow:0 10px 30px rgba(255,122,162,0.25);
         }
+        .btn-yes:hover { transform:translateY(-5px) scale(1.04);box-shadow:0 20px 50px rgba(255,122,162,0.4); }
 
-        .btn-yes:hover {
-            transform: translateY(-5px) rotateX(10deg);
-            box-shadow: 0 20px 50px rgba(255, 122, 162, 0.35);
-        }
-
-        .btn-yes:active {
-            transform: scale(0.95);
-        }
-
+        /* No button */
         .btn-no {
-            background: linear-gradient(135deg, #a78bfa 0%, #67e8f9 100%);
-            color: #1f2937;
-            border: 2px solid rgba(255, 255, 255, 0.35);
-            box-shadow: 0 10px 30px rgba(167, 139, 250, 0.25);
+            background:linear-gradient(135deg,#a78bfa 0%,#67e8f9 100%);
+            color:#1f2937;
+            border:2px solid rgba(255,255,255,0.35);
+            box-shadow:0 10px 30px rgba(167,139,250,0.25);
         }
-
-        .btn-no:hover {
-            background: linear-gradient(135deg, #67e8f9 0%, #86efac 100%);
-            transform: translateY(-3px);
+        /* Only apply hover styles when NOT roaming */
+        .btn-no:not(.roaming):hover {
+            background:linear-gradient(135deg,#67e8f9 0%,#86efac 100%);
+            transform:translateY(-3px);
+            box-shadow:0 18px 40px rgba(103,232,249,0.4);
         }
-
-        .btn-no.is-fleeing {
-            box-shadow: 0 18px 40px rgba(103, 232, 249, 0.35);
-        }
-
         .btn-no.roaming {
-            position: fixed;
-            z-index: 10001;
-            will-change: left, top, transform;
+            position:fixed !important;
+            z-index:10001;
+            transition:none !important;
+            will-change:left,top;
         }
-
-        .btn-no.wobble {
-            animation: wobble 0.28s ease-in-out infinite;
-        }
-
         @keyframes wobble {
-            0%, 100% { transform: rotate(-4deg) scale(1.02); }
-            50% { transform: rotate(4deg) scale(1.06); }
+            0%,100% { transform:rotate(-5deg) scale(1.05); }
+            50%      { transform:rotate(5deg)  scale(1.09); }
+        }
+        .btn-no.wobble { animation:wobble 0.3s ease-in-out 3; }
+
+        /* Emotional message bubble */
+        #emotionalText {
+            position:fixed;
+            background:linear-gradient(135deg,#ff7aa2,#ffd166);
+            color:#fff;
+            font-size:0.92rem;font-weight:700;
+            padding:9px 18px;border-radius:22px;
+            box-shadow:0 6px 24px rgba(255,122,162,0.45);
+            white-space:nowrap;
+            pointer-events:none;
+            z-index:10003;
+            opacity:0;
+            transform:translateY(4px) scale(0.85);
+            transition:opacity 0.18s ease,transform 0.18s ease;
+        }
+        #emotionalText.show {
+            opacity:1;
+            transform:translateY(-6px) scale(1);
         }
 
-        /* Success Screen */
-        .success-screen {
-            display: none;
-            text-align: center;
-            padding: 60px 20px;
-            animation: fadeInScale 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .success-screen.active {
-            display: block;
-        }
-
+        /* Success */
+        .success-screen { display:none;text-align:center;padding:60px 20px;position:relative;z-index:10; }
+        .success-screen.active { display:block;animation:fadeInScale 0.8s cubic-bezier(0.4,0,0.2,1); }
         @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.8) rotateY(-20deg);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) rotateY(0);
-            }
+            from { opacity:0;transform:scale(0.8) rotateY(-20deg); }
+            to   { opacity:1;transform:scale(1) rotateY(0); }
         }
-
-        .success-icon {
-            font-size: 150px;
-            display: inline-block;
-            animation: successBounce 1s ease infinite;
-            filter: drop-shadow(0 20px 40px rgba(255, 122, 162, 0.3));
-        }
-
+        .success-icon { font-size:150px;display:inline-block;animation:successBounce 1.2s ease infinite;filter:drop-shadow(0 20px 40px rgba(255,122,162,0.3)); }
         @keyframes successBounce {
-            0%, 100% {
-                transform: translateY(0) rotateZ(-5deg);
-            }
-            50% {
-                transform: translateY(-30px) rotateZ(5deg);
-            }
+            0%,100% { transform:translateY(0) rotateZ(-5deg); }
+            50%     { transform:translateY(-30px) rotateZ(5deg); }
         }
-
         .success-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 900;
-            background: linear-gradient(135deg,
-                #ff7aa2 0%,
-                #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 30px 0 20px;
+            font-family:'Playfair Display',serif;
+            font-size:clamp(2.5rem,6vw,4rem);font-weight:900;
+            background:linear-gradient(135deg,#ff7aa2 0%,#a78bfa 100%);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+            margin:30px 0 20px;
         }
-
-        .success-message {
-            font-size: 1.3rem;
-            color: var(--text-light);
-            margin: 20px 0;
-            opacity: 0.9;
-        }
-
-        .event-summary {
-            display: grid;
-            gap: 25px;
-            margin: 50px 0;
-        }
-
+        .success-message { font-size:1.3rem;color:var(--text-dark);margin:20px 0;opacity:0.9; }
+        .event-summary { display:grid;gap:25px;margin:50px 0; }
         .summary-card {
-            background: linear-gradient(135deg,
-                rgba(255, 248, 251, 0.95) 0%,
-                rgba(255, 225, 238, 0.95) 100%);
-            border: 1px solid rgba(255, 122, 162, 0.18);
-            border-radius: 20px;
-            padding: 35px;
-            text-align: left;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
+            background:linear-gradient(135deg,rgba(255,248,251,0.95),rgba(255,225,238,0.95));
+            border:1px solid rgba(255,122,162,0.18);
+            border-radius:20px;padding:35px;text-align:left;
+            transition:all 0.4s ease;position:relative;overflow:hidden;
         }
-
         .summary-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.1), 
-                transparent);
-            transition: left 0.6s ease;
+            content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+            background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);
+            transition:left 0.6s ease;
         }
-
-        .summary-card:hover::after {
-            left: 100%;
-        }
-
-        .summary-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 20px 50px rgba(255, 122, 162, 0.2);
-        }
-
-        .summary-icon {
-            font-size: 3.5rem;
-            display: block;
-            margin-bottom: 20px;
-        }
-
-        .summary-label {
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #ff7aa2;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .summary-text {
-            font-size: 1.2rem;
-            line-height: 1.7;
-            font-weight: 500;
-        }
+        .summary-card:hover::after { left:100%; }
+        .summary-card:hover { transform:translateX(10px);box-shadow:0 20px 50px rgba(255,122,162,0.2); }
+        .summary-icon { font-size:3.5rem;display:block;margin-bottom:20px; }
+        .summary-label { font-size:1rem;text-transform:uppercase;letter-spacing:0.1em;color:#ff7aa2;font-weight:600;margin-bottom:10px; }
+        .summary-text { font-size:1.2rem;line-height:1.7;font-weight:500; }
 
         /* Footer */
-        .footer {
-            text-align: center;
-            padding: 40px 20px;
-            font-size: 0.95rem;
-            opacity: 0.7;
-            font-style: italic;
-        }
+        .footer { text-align:center;padding:40px 20px;font-size:0.95rem;opacity:0.7;font-style:italic; }
 
         /* Confetti */
-        .confetti-piece {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #ff7aa2;
-            pointer-events: none;
-            z-index: 9999;
-            animation: confettiFall 3s linear forwards;
-        }
+        .confetti-piece { position:fixed;pointer-events:none;z-index:9999;animation:confettiFall 3s linear forwards; }
+        @keyframes confettiFall { to { transform:translateY(100vh) rotate(720deg);opacity:0; } }
 
-        @keyframes confettiFall {
-            to {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
+        /* Cursor trail */
+        .cursor-trail { position:fixed;width:6px;height:6px;background:#ff7aa2;border-radius:50%;pointer-events:none;z-index:9999;opacity:0.6;animation:cursorFade 0.8s ease forwards; }
+        @keyframes cursorFade { to { transform:scale(2);opacity:0; } }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .content {
-                padding: 40px 15px;
-            }
-
-            .floating-icon {
-                font-size: 80px;
-            }
-
-            .glass-card {
-                padding: 30px 20px;
-            }
-
-            .details-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .button-section {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .orb {
-                width: 250px !important;
-                height: 250px !important;
-            }
+        @media(max-width:768px){
+            .content{padding:40px 15px;}
+            .floating-icon{font-size:80px;}
+            .glass-card{padding:30px 20px;}
+            .button-section{flex-direction:column;align-items:center;}
+            .btn{width:100%;max-width:300px;}
+            .orb{width:250px!important;height:250px!important;}
         }
-
-        @media (max-width: 480px) {
-            .content {
-                padding: 30px 12px;
-            }
-
-            h1 {
-                font-size: clamp(2rem, 6vw, 3.5rem) !important;
-                margin: 20px 0;
-            }
-
-            .tagline {
-                font-size: clamp(1rem, 2.5vw, 1.3rem);
-                margin: 15px 0 25px;
-            }
-
-            .floating-icon {
-                font-size: 60px;
-            }
-
-            .glass-card {
-                padding: 20px 15px;
-                margin: 20px 0;
-                border-radius: 16px;
-            }
-
-            .message-section {
-                font-size: 0.95rem;
-                line-height: 1.7;
-                margin: 15px 0;
-            }
-
-            .detail-icon {
-                font-size: 2rem;
-                margin-bottom: 10px;
-            }
-
-            .detail-label {
-                font-size: 0.7rem;
-                margin-bottom: 6px;
-            }
-
-            .detail-value {
-                font-size: 0.95rem;
-            }
-
-            .detail-item {
-                padding: 20px 15px;
-                border-radius: 12px;
-            }
-
-            .venue-name {
-                font-size: 1.4rem;
-                margin-bottom: 10px;
-            }
-
-            .venue-address {
-                font-size: 0.9rem;
-                line-height: 1.6;
-            }
-
-            .venue-card {
-                padding: 20px;
-                margin: 20px 0;
-                border-radius: 16px;
-            }
-
-            .button-section {
-                gap: 15px;
-                margin: 40px 0;
-            }
-
-            .btn {
-                padding: 14px 28px;
-                font-size: 0.95rem;
-                min-height: 44px;
-                max-width: none;
-                width: 100%;
-            }
-
-            .details-grid {
-                gap: 15px;
-                margin: 25px 0;
-            }
-
-            .success-icon {
-                font-size: 100px;
-                margin-bottom: 15px;
-            }
-
-            .success-title {
-                font-size: clamp(1.8rem, 5vw, 2.5rem);
-                margin: 20px 0 15px;
-            }
-
-            .success-message {
-                font-size: 1.05rem;
-                margin: 15px 0;
-            }
-
-            .event-summary {
-                gap: 15px;
-                margin: 30px 0;
-            }
-
-            .summary-card {
-                padding: 20px;
-                border-radius: 16px;
-            }
-
-            .summary-icon {
-                font-size: 2.5rem;
-                margin-bottom: 15px;
-            }
-
-            .summary-label {
-                font-size: 0.85rem;
-                margin-bottom: 8px;
-            }
-
-            .summary-text {
-                font-size: 1rem;
-                line-height: 1.6;
-            }
-
-            .footer {
-                padding: 25px 15px;
-                font-size: 0.85rem;
-            }
-
-            .orb {
-                width: 150px !important;
-                height: 150px !important;
-            }
-
-            .highlight {
-                display: inline;
-            }
-        }
-
-        /* Cursor Trail */
-        .cursor-trail {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            background: #ff7aa2;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.6;
-            animation: cursorFade 0.8s ease forwards;
-        }
-
-        .button-spark {
-            position: fixed;
-            pointer-events: none;
-            z-index: 10002;
-            font-size: 1.1rem;
-            animation: sparkPop 0.8s ease forwards;
-        }
-
-        @keyframes sparkPop {
-            0% {
-                transform: translateY(0) scale(0.7);
-                opacity: 0;
-            }
-            20% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-50px) scale(1.1);
-                opacity: 0;
-            }
-        }
-
-        @keyframes cursorFade {
-            to {
-                transform: scale(2);
-                opacity: 0;
-            }
-        }
-
-        /* No Button Emotional Text */
-        .no-button-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .emotional-text {
-            position: fixed;
-            white-space: nowrap;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #ff7aa2;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 10002;
-            transition: opacity 0.3s ease;
-            text-shadow: 0 2px 8px rgba(255, 122, 162, 0.2);
-        }
-
-        .emotional-text.show {
-            opacity: 1;
-        }
-
-        /* Background Music Control */
-        .music-toggle {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff7aa2 0%, #a78bfa 100%);
-            border: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 30px rgba(255, 122, 162, 0.3);
-            transition: all 0.3s ease;
-            z-index: 8000;
-        }
-
-        .music-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(255, 122, 162, 0.4);
-        }
-
-        .music-toggle:active {
-            transform: scale(0.95);
-        }
-
-        @media (max-width: 480px) {
-            .music-toggle {
-                bottom: 20px;
-                right: 20px;
-                width: 45px;
-                height: 45px;
-                font-size: 1.2rem;
-            }
-        }
-
-        @keyframes textFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        @media(max-width:480px){
+            .content{padding:30px 12px;}
+            h1{font-size:clamp(2rem,6vw,3.5rem)!important;margin:20px 0;}
+            .tagline{font-size:clamp(1rem,2.5vw,1.3rem);margin:15px 0 25px;}
+            .floating-icon{font-size:60px;}
+            .glass-card{padding:20px 15px;margin:20px 0;border-radius:16px;}
+            .message-section{font-size:0.95rem;line-height:1.7;}
+            .btn{padding:14px 28px;font-size:0.95rem;min-height:44px;max-width:none;width:100%;}
+            .orb{width:150px!important;height:150px!important;}
+            .summary-card{padding:20px;border-radius:16px;}
+            .summary-text{font-size:1rem;}
         }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
-    <div class="particle-container" id="particleContainer"></div>
 
-    <!-- 3D Orbs -->
-    <div class="scene-3d">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+<!-- Particles -->
+<div class="particle-container" id="particleContainer"></div>
+
+<!-- Orbs -->
+<div class="scene-3d">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+</div>
+
+<!-- Message bubble — on body root so fixed positioning is clean -->
+<div id="emotionalText"></div>
+
+<!-- Main Content -->
+<div class="content" id="mainContent">
+    <div class="hero">
+        <div class="floating-icon">🎓</div>
+        <h1>You're Invited</h1>
+        <p class="tagline">A Celebration of Memories, Achievements & New Beginnings</p>
     </div>
 
-    <!-- Main Content -->
-    <div class="content">
-        <!-- Hero Section -->
-        <div class="hero" id="heroSection">
-            <div class="floating-icon">🎓</div>
-            <h1>You're Invited</h1>
-            <p class="tagline">A Celebration of Memories, Achievements & New Beginnings</p>
-        </div>
-
-        <!-- Welcome Message -->
-        <div class="glass-card">
-            <div class="message-section">
-                Dear Faculty, Seniors, and Esteemed Guests 🌸
-                <br><br>
-                You're warmly invited to a farewell celebration filled with gratitude, smiles, and a few perfectly timed laughs. Come for the memories, stay for the good vibes, and leave with a heart full of happy moments. ✨
-                <br><br>
-                <span class="highlight">Warning: this invite may cause smiling, clapping, and at least one "aww that's sweet" moment. 💖</span>
-                <br><br>
-                So... will you honor us with your presence? 🌷
-            </div>
-        </div>
-
-        <!-- RSVP Section -->
-        <div class="glass-card">
-            <div class="message-section" style="text-align: center;">
-                So... are we celebrating together or should we send the very dramatic no button? 👀🎀
-            </div>
-
-            <div class="button-section">
-                <button class="btn btn-yes" id="yesBtn">
-                    <span style="position: relative; z-index: 1;">Yes, of course 💕</span>
-                </button>
-                <div class="no-button-container">
-                    <button class="btn btn-no" id="noBtn">
-                        <span style="position: relative; z-index: 1;">No</span>
-                    </button>
-                    <div class="emotional-text" id="emotionalText" style="display: none;"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer">
-            🫠 Tiny warning: the "busy" button is a professional escape artist.
+    <div class="glass-card">
+        <div class="message-section">
+            Dear Faculty, Seniors, and Esteemed Guests 🌸
+            <br><br>
+            You're warmly invited to a farewell celebration filled with gratitude, smiles, and a few perfectly timed laughs. Come for the memories, stay for the good vibes, and leave with a heart full of happy moments. ✨
+            <br><br>
+            <span class="highlight">Warning: this invite may cause smiling, clapping, and at least one "aww that's sweet" moment. 💖</span>
+            <br><br>
+            So... will you honor us with your presence? 🌷
         </div>
     </div>
 
-    <!-- Success Screen -->
-    <div class="success-screen" id="successScreen">
-            <div class="success-icon">🎀</div>
-            <h2 class="success-title">Wonderful, You're In! 💖</h2>
-            <p class="success-message">Thank you for being part of this special farewell. Your presence will make the celebration truly memorable. 🫶</p>
-        <div class="event-summary">
-            <div class="summary-card">
-                <span class="summary-icon">🎓</span>
-                <div class="summary-label">The Main Event 🎬</div>
-                <div class="summary-text">CS Department Farewell Celebration<br>Kinnaird College Lahore ✨</div>
-            </div>
-
-            <div class="summary-card">
-                <span class="summary-icon">📅</span>
-                <div class="summary-label">Date & Time ⏰</div>
-                <div class="summary-text">16th May 2026<br>2:00 PM - 5:30 PM</div>
-            </div>
-
-            <div class="summary-card">
-                <span class="summary-icon">📍</span>
-                <div class="summary-label">Venue 📍</div>
-                <div class="summary-text">
-                    Hotel d'GATES (a lovely venue for a lovely day 💎)<br>
-                    17-A Abubakar Block, Ferozepur Road<br>
-                    opposite Qaddafi Stadium, New Muslim Town<br>
-                    Abu Bakar Block, Garden Town, Lahore
-                </div>
-            </div>
+    <div class="glass-card">
+        <div class="message-section" style="text-align:center;">
+            So... are we celebrating together or should we send the very dramatic no button? 👀🎀
         </div>
-
-        <p style="font-size: 1.2rem; margin-top: 40px; color: var(--accent-lime);">
-            We look forward to celebrating with you. 💖✨
-        </p>
+        <div class="button-section">
+            <button class="btn btn-yes" id="yesBtn">
+                <span style="position:relative;z-index:1;">Yes, of course 💕</span>
+            </button>
+            <button class="btn btn-no" id="noBtn">
+                <span style="position:relative;z-index:1;">No</span>
+            </button>
+        </div>
     </div>
 
-    <script>
-        // Particle System
-        function createParticles() {
-            const container = document.getElementById('particleContainer');
-            const particleCount = 80;
+    <div class="footer">
+        🫠 Tiny warning: the "busy" button is a professional escape artist.
+    </div>
+</div>
 
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.setProperty('--duration', (10 + Math.random() * 20) + 's');
-                particle.style.setProperty('--drift', (Math.random() * 200 - 100) + 'px');
-                particle.style.animationDelay = Math.random() * 10 + 's';
-                particle.style.opacity = Math.random() * 0.5 + 0.3;
-                container.appendChild(particle);
-            }
-        }
+<!-- Success Screen -->
+<div class="success-screen" id="successScreen">
+    <div class="success-icon">🎀</div>
+    <h2 class="success-title">Wonderful, You're In! 💖</h2>
+    <p class="success-message">Thank you for being part of this special farewell. Your presence will make the celebration truly memorable. 🫶</p>
+    <div class="event-summary">
+        <div class="summary-card">
+            <span class="summary-icon">🎓</span>
+            <div class="summary-label">The Main Event 🎬</div>
+            <div class="summary-text">CS Department Farewell Celebration<br>Kinnaird College Lahore ✨</div>
+        </div>
+        <div class="summary-card">
+            <span class="summary-icon">📅</span>
+            <div class="summary-label">Date & Time ⏰</div>
+            <div class="summary-text">16th May 2026<br>2:00 PM – 5:30 PM</div>
+        </div>
+        <div class="summary-card">
+            <span class="summary-icon">📍</span>
+            <div class="summary-label">Venue 📍</div>
+            <div class="summary-text">
+                Hotel d'GATES 💎<br>
+                17-A Abubakar Block, Ferozepur Road<br>
+                opposite Qaddafi Stadium, New Muslim Town<br>
+                Abu Bakar Block, Garden Town, Lahore
+            </div>
+        </div>
+    </div>
+    <p style="font-size:1.2rem;margin-top:40px;color:var(--accent-lime);">
+        We look forward to celebrating with you. 💖✨
+    </p>
+</div>
 
-        createParticles();
+<!-- Audio -->
+<audio id="bgMusic" loop preload="auto" autoplay playsinline>
+    <source src="https://cdn.pixabay.com/audio/2025/07/20/audio_d39b1267f3.mp3" type="audio/mpeg">
+    <source src="https://assets.mixkit.co/active_storage/sounds/7039-magical-chime-calm-and-uplifting.mp3" type="audio/mpeg">
+</audio>
 
-        // Parallax Effect
-        document.addEventListener('mousemove', (e) => {
-            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+<script>
+/* ── Particles ── */
+(function(){
+    const c=document.getElementById('particleContainer');
+    for(let i=0;i<80;i++){
+        const p=document.createElement('div');
+        p.className='particle';
+        p.style.left=Math.random()*100+'%';
+        p.style.setProperty('--dur',(10+Math.random()*20)+'s');
+        p.style.setProperty('--drift',(Math.random()*200-100)+'px');
+        p.style.animationDelay=Math.random()*10+'s';
+        c.appendChild(p);
+    }
+})();
 
-            document.querySelectorAll('.orb').forEach((orb, index) => {
-                const speed = (index + 1) * 0.5;
-                orb.style.transform = `translate(${moveX * speed}px, ${moveY * speed}px)`;
-            });
-        });
+/* ── Parallax orbs ── */
+document.addEventListener('mousemove',e=>{
+    const mx=(e.clientX-window.innerWidth/2)*0.01;
+    const my=(e.clientY-window.innerHeight/2)*0.01;
+    document.querySelectorAll('.orb').forEach((o,i)=>{
+        const s=(i+1)*0.5;
+        o.style.transform=`translate(${mx*s}px,${my*s}px)`;
+    });
+});
 
-        // Cursor Trail
-        document.addEventListener('mousemove', (e) => {
-            if (Math.random() > 0.8) {
-                const trail = document.createElement('div');
-                trail.className = 'cursor-trail';
-                trail.style.left = e.clientX + 'px';
-                trail.style.top = e.clientY + 'px';
-                document.body.appendChild(trail);
+/* ── Cursor trail ── */
+document.addEventListener('mousemove',e=>{
+    if(Math.random()>0.8){
+        const t=document.createElement('div');
+        t.className='cursor-trail';
+        t.style.left=e.clientX+'px';t.style.top=e.clientY+'px';
+        document.body.appendChild(t);
+        setTimeout(()=>t.remove(),800);
+    }
+});
 
-                setTimeout(() => trail.remove(), 800);
-            }
-        });
+/* ══════════════════════════════════════
+   MUSIC
+   Strategy:
+   1. Try autoplay immediately (works on some browsers)
+   2. On first ANY user gesture → try again (covers autoplay-blocked browsers)
+   3. Music persists across success screen (nothing stops it)
+══════════════════════════════════════ */
+const bgMusic = document.getElementById('bgMusic');
+bgMusic.volume = 0.28;
 
-        // Button Interactions
-        const yesBtn = document.getElementById('yesBtn');
-        const noBtn = document.getElementById('noBtn');
-        const heroSection = document.getElementById('heroSection');
-        const successScreen = document.getElementById('successScreen');
+let musicStarted = false;
 
-        yesBtn.addEventListener('click', () => {
-            // Hide hero
-            document.querySelector('.content').style.display = 'none';
-            noBtn.style.display = 'none';
-            noBtn.hidden = true;
-            
-            // Show success
-            successScreen.classList.add('active');
-            
-            // Create confetti
-            createConfetti();
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+function tryStart(){
+    if(musicStarted && !bgMusic.paused) return;
+    bgMusic.play().then(()=>{
+        musicStarted=true;
+    }).catch(()=>{});
+}
 
-        // No button runs away with funny messages
-        const emotionalMessages = [
-            'no means yes? 🤔',
-            'running away is fun! 🏃',
-            'catch me if u can 😏',
-            'button goes *zoom* 🚀',
-            'too slow! 👻',
-            'i\'m shy! 🙈',
-            'nope nope nope! 🏃‍♀️',
-            'nice try tho 😆',
-            'can\'t touch this 🎵'
-        ];
-        let messageIndex = 0;
-        const emotionalText = document.getElementById('emotionalText');
+// Attempt as early and as often as the browser will allow.
+tryStart();
+document.addEventListener('DOMContentLoaded',tryStart,{once:true});
+window.addEventListener('load',tryStart,{once:true});
+bgMusic.addEventListener('canplaythrough',tryStart,{once:true});
 
-        // No button also shows success
-        noBtn.addEventListener('click', () => {
-            // Hide hero
-            document.querySelector('.content').style.display = 'none';
-            noBtn.style.display = 'none';
-            noBtn.hidden = true;
-            emotionalText.style.display = 'none';
-            
-            // Show success
-            successScreen.classList.add('active');
-            
-            // Create confetti
-            createConfetti();
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+// On first gesture (covers autoplay-blocked browsers)
+const gestureEvents=['pointerdown','keydown','touchstart','scroll'];
+function onFirstGesture(){
+    tryStart();
+    gestureEvents.forEach(ev=>document.removeEventListener(ev,onFirstGesture,true));
+}
+gestureEvents.forEach(ev=>document.addEventListener(ev,onFirstGesture,{once:true,capture:true}));
 
-        // Confetti System
-        function createConfetti() {
-            const colors = ['#FFD700', '#FF1493', '#9D4EDD', '#00FFF7', '#00FF41', '#FF6B00', '#FF69B4'];
-            const confettiCount = 150;
+// Keep playing if tab comes back into focus
+document.addEventListener('visibilitychange',()=>{
+    if(!document.hidden) tryStart();
+});
 
-            for (let i = 0; i < confettiCount; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti-piece';
-                    confetti.style.left = Math.random() * window.innerWidth + 'px';
-                    confetti.style.top = '-10px';
-                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
-                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
-                    
-                    document.body.appendChild(confetti);
+/* ── Confetti ── */
+function createConfetti(){
+    const colors=['#FFD700','#FF1493','#9D4EDD','#00FFF7','#00FF41','#FF6B00','#FF69B4'];
+    for(let i=0;i<150;i++){
+        setTimeout(()=>{
+            const c=document.createElement('div');
+            c.className='confetti-piece';
+            c.style.left=Math.random()*window.innerWidth+'px';
+            c.style.top='-10px';
+            c.style.background=colors[Math.floor(Math.random()*colors.length)];
+            c.style.borderRadius=Math.random()>0.5?'50%':'3px';
+            c.style.width=(7+Math.random()*9)+'px';
+            c.style.height=(7+Math.random()*9)+'px';
+            c.style.animationDuration=(2+Math.random()*2)+'s';
+            c.style.animationDelay=Math.random()*0.5+'s';
+            document.body.appendChild(c);
+            setTimeout(()=>c.remove(),3500);
+        },i*15);
+    }
+}
 
-                    setTimeout(() => confetti.remove(), 3500);
-                }, i * 15);
-            }
-        }
+/* ── YES button ── */
+function showSuccess(){
+    document.getElementById('mainContent').style.display='none';
+    if(noBtn.parentNode) noBtn.parentNode.removeChild(noBtn);
+    msgEl.classList.remove('show');
+    document.getElementById('successScreen').classList.add('active');
+    createConfetti();
+    window.scrollTo({top:0,behavior:'smooth'});
+    // music keeps going — no stop call
+}
+document.getElementById('yesBtn').addEventListener('click',showSuccess);
 
-        // 3D Card Tilt Effect
-        document.querySelectorAll('.glass-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+/* ══════════════════════════════════════
+   NO BUTTON — FLEE + MESSAGES
 
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
+   Key fixes vs previous versions:
+   • msgEl lives on <body> (not inside card) → fixed pos works everywhere
+   • flee() called on mouseenter (not mouseover) so it fires once per entry
+   • No z-index on :hover that could block pointer events
+   • Messages appear as a styled pill near the cursor, guaranteed visible
+   • No can never be clicked into acceptance; only Yes confirms
+══════════════════════════════════════ */
+const noBtn     = document.getElementById('noBtn');
+const msgEl     = document.getElementById('emotionalText');
+const MAX_FLEES = 6;
+let   fleeCount = 0;
+let   isRoaming = false;
+let   msgTimer  = null;
 
-                const rotateX = (y - centerY) / 20;
-                const rotateY = (centerX - x) / 20;
+const messages=[
+    "No?? Really? 😤",
+    "Running away! 🏃‍♀️💨",
+    "Catch me if u can! 😏",
+    "Button goes zoom~ 🚀",
+    "Too slow hehe 👻",
+    "I'm sooo shy! 🙈",
+    "Nope nope nope! 🏃",
+    "Nice try though 😆",
+    "Can't touch this! 🎵",
+    "Almost had me! 💅"
+];
 
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
-            });
+function showMsg(x,y){
+    msgEl.textContent=messages[fleeCount % messages.length];
+    // position bubble above cursor, clamp to viewport
+    const bw=200;
+    const lx=Math.min(Math.max(x-bw/2,8), window.innerWidth-bw-8);
+    const ly=Math.max(y-54,8);
+    msgEl.style.left=lx+'px';
+    msgEl.style.top =ly+'px';
+    msgEl.classList.add('show');
+    clearTimeout(msgTimer);
+    msgTimer=setTimeout(()=>msgEl.classList.remove('show'),1500);
+}
 
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-            });
-        });
+function fleePos(){
+    const w=noBtn.offsetWidth||160, h=noBtn.offsetHeight||52, pad=24;
+    return {
+        x: pad+Math.random()*(window.innerWidth -w-pad*2),
+        y: pad+Math.random()*(window.innerHeight-h-pad*2)
+    };
+}
 
-        // Scroll Animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
+function flee(cx,cy){
+    fleeCount++;
+    if(fleeCount>MAX_FLEES){
+        fleeCount=MAX_FLEES;
+        showMsg(cx ?? window.innerWidth/2,cy ?? window.innerHeight/2);
+        return;
+    }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
+    // First time: rip button out of flow → fixed on body
+    if(!isRoaming){
+        isRoaming=true;
+        const r=noBtn.getBoundingClientRect();
+        noBtn.style.width =noBtn.offsetWidth+'px';
+        noBtn.style.height=noBtn.offsetHeight+'px';
+        noBtn.style.left  =r.left+'px';
+        noBtn.style.top   =r.top+'px';
+        noBtn.style.margin='0';
+        noBtn.classList.add('roaming');
+        document.body.appendChild(noBtn);
+    }
 
-        document.querySelectorAll('.glass-card, .detail-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(50px)';
-            el.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
-            observer.observe(el);
-        });
-    </script>
+    const pos=fleePos();
+    noBtn.style.left=pos.x+'px';
+    noBtn.style.top =pos.y+'px';
 
-    <!-- Background Music -->
-    <audio id="backgroundMusic" loop autoplay>
-        <source src="https://assets.mixkit.co/active_storage/sounds/7039-magical-chime-calm-and-uplifting.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    // restart wobble
+    noBtn.classList.remove('wobble');
+    void noBtn.offsetWidth;
+    noBtn.classList.add('wobble');
+    setTimeout(()=>noBtn.classList.remove('wobble'),900);
 
-    <!-- Music Toggle Button -->
-    <button class="music-toggle" id="musicToggle" title="Toggle Music">🎵</button>
+    // show message near cursor (fall back to near button on mobile)
+    const mx=(cx!==undefined)?cx:pos.x+noBtn.offsetWidth/2;
+    const my=(cy!==undefined)?cy:pos.y;
+    showMsg(mx,my);
+}
 
-    <script>
-        // Background Music Control
-        const bgMusic = document.getElementById('backgroundMusic');
-        const musicToggle = document.getElementById('musicToggle');
-        let isMusicPlaying = true;
+// mouseenter fires once per hover entry — perfect for desktop flee
+noBtn.addEventListener('mouseenter',e=>{
+    flee(e.clientX,e.clientY);
+});
 
-        // Set initial volume
-        bgMusic.volume = 0.4;
+// touchstart for mobile
+noBtn.addEventListener('touchstart',e=>{
+    if(window.PointerEvent) return;
+    e.preventDefault();
+    const t=e.touches[0];
+    flee(t.clientX,t.clientY);
+},{passive:false});
 
-        // Auto-play on page load
-        window.addEventListener('load', () => {
-            bgMusic.volume = 0.4;
-            bgMusic.play().catch(() => {
-                console.log('Autoplay prevented');
-            });
-            musicToggle.textContent = '🎶';
-        });
+// pointerdown/click: No never confirms anything. It only dodges away.
+noBtn.addEventListener('pointerdown',e=>{
+    e.preventDefault();
+    flee(e.clientX,e.clientY);
+});
 
-        // Try to play on first user interaction
-        document.addEventListener('click', () => {
-            if (bgMusic.paused) {
-                bgMusic.play().catch(() => {});
-                musicToggle.textContent = '🎶';
-                isMusicPlaying = true;
-            }
-        }, { once: true });
+noBtn.addEventListener('click',e=>{
+    e.preventDefault();
+    e.stopPropagation();
+});
 
-        // Music toggle button
-        musicToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (isMusicPlaying) {
-                bgMusic.pause();
-                musicToggle.textContent = '🎵';
-                isMusicPlaying = false;
-            } else {
-                bgMusic.play().catch(() => {});
-                musicToggle.textContent = '🎶';
-                isMusicPlaying = true;
-            }
-        });
-    </script>
+/* ── 3D card tilt ── */
+document.querySelectorAll('.glass-card').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+        const r=card.getBoundingClientRect();
+        const rx=(e.clientY-r.top -r.height/2)/20;
+        const ry=(r.width/2-(e.clientX-r.left))/20;
+        card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px)`;
+    });
+    card.addEventListener('mouseleave',()=>{
+        card.style.transform='perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+    });
+});
+
+/* ── Scroll reveal ── */
+const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+        if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}
+    });
+},{threshold:0.1,rootMargin:'0px 0px -80px 0px'});
+document.querySelectorAll('.glass-card').forEach(el=>{
+    el.style.opacity='0';el.style.transform='translateY(50px)';
+    el.style.transition='all 0.8s cubic-bezier(0.4,0,0.2,1)';
+    obs.observe(el);
+});
+</script>
 </body>
 </html>
