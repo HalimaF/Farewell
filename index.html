@@ -1173,117 +1173,53 @@
         });
     </script>
 
+    <!-- Background Music -->
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="https://assets.mixkit.co/active_storage/sounds/7039-magical-chime-calm-and-uplifting.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <!-- Music Toggle Button -->
     <button class="music-toggle" id="musicToggle" title="Toggle Music">🎵</button>
 
     <script>
-        // Create beautiful cute background music using Web Audio API
-        let audioContext = null;
-        let musicPlaying = true; // Start as true so it plays automatically
+        // Background Music Control
+        const bgMusic = document.getElementById('backgroundMusic');
         const musicToggle = document.getElementById('musicToggle');
+        let isMusicPlaying = true;
 
-        function initAudioContext() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            return audioContext;
-        }
+        // Set initial volume
+        bgMusic.volume = 0.4;
 
-        function playBeautifulMelody() {
-            const ctx = initAudioContext();
-            const now = ctx.currentTime;
-
-            // Upbeat, fun, celebratory melody - much more vibe!
-            const notes = [
-                { freq: 659.25, duration: 0.2, type: 'sine' },   // E5
-                { freq: 783.99, duration: 0.2, type: 'sine' },   // G5
-                { freq: 659.25, duration: 0.2, type: 'sine' },   // E5
-                { freq: 783.99, duration: 0.2, type: 'sine' },   // G5
-                { freq: 880, duration: 0.4, type: 'sine' },      // A5
-                { freq: 783.99, duration: 0.2, type: 'sine' },   // G5
-                { freq: 659.25, duration: 0.2, type: 'sine' },   // E5
-                { freq: 783.99, duration: 0.2, type: 'sine' },   // G5
-                { freq: 880, duration: 0.2, type: 'sine' },      // A5
-                { freq: 987.77, duration: 0.4, type: 'sine' },   // B5
-                { freq: 880, duration: 0.2, type: 'sine' },      // A5
-                { freq: 783.99, duration: 0.2, type: 'sine' },   // G5
-                { freq: 880, duration: 0.2, type: 'sine' },      // A5
-                { freq: 987.77, duration: 0.4, type: 'sine' },   // B5
-                { freq: 1046.50, duration: 0.6, type: 'sine' },  // C6 - high note for celebration!
-            ];
-
-            let currentTime = now;
-            notes.forEach((note, index) => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                const filter = ctx.createBiquadFilter();
-
-                osc.type = note.type;
-                osc.frequency.value = note.freq;
-                filter.type = 'lowpass';
-                filter.frequency.value = 5000;
-
-                gain.gain.setValueAtTime(0.12, currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, currentTime + note.duration - 0.02);
-                gain.gain.setValueAtTime(0, currentTime + note.duration);
-
-                osc.connect(filter);
-                filter.connect(gain);
-                gain.connect(ctx.destination);
-
-                osc.start(currentTime);
-                osc.stop(currentTime + note.duration);
-
-                currentTime += note.duration;
-            });
-        }
-
-        function playLoopingMelody() {
-            if (musicPlaying) {
-                playBeautifulMelody();
-                setTimeout(playLoopingMelody, 4500); // Loop every 4.5 seconds - faster, more upbeat!
-            }
-        }
-
-        // Start music immediately on page load
+        // Auto-play on page load
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                const ctx = initAudioContext();
-                if (ctx.state === 'suspended') {
-                    ctx.resume();
-                }
-                musicPlaying = true;
-                musicToggle.textContent = '🎶';
-                playLoopingMelody();
-            }, 500);
+            bgMusic.volume = 0.4;
+            bgMusic.play().catch(() => {
+                console.log('Autoplay prevented');
+            });
+            musicToggle.textContent = '🎶';
         });
 
-        // Also start on first user interaction if page already loaded
+        // Try to play on first user interaction
         document.addEventListener('click', () => {
-            if (!musicPlaying) {
-                const ctx = initAudioContext();
-                if (ctx.state === 'suspended') {
-                    ctx.resume();
-                }
-                musicPlaying = true;
+            if (bgMusic.paused) {
+                bgMusic.play().catch(() => {});
                 musicToggle.textContent = '🎶';
-                playLoopingMelody();
+                isMusicPlaying = true;
             }
         }, { once: true });
 
         // Music toggle button
-        musicToggle.addEventListener('click', () => {
-            if (musicPlaying) {
-                musicPlaying = false;
+        musicToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isMusicPlaying) {
+                bgMusic.pause();
                 musicToggle.textContent = '🎵';
+                isMusicPlaying = false;
             } else {
-                const ctx = initAudioContext();
-                if (ctx.state === 'suspended') {
-                    ctx.resume();
-                }
-                musicPlaying = true;
+                bgMusic.play().catch(() => {});
                 musicToggle.textContent = '🎶';
-                playLoopingMelody();
+                isMusicPlaying = true;
             }
         });
     </script>
